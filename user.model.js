@@ -13,4 +13,22 @@ const userSchema = new mongoose.Schema({
 
 })
 
+userSchema.pre("save" , function(next){
+    let hash =  bcrypt.hashSync(this.password, 8)
+    this.password = hash
+
+    return next()
+})
+//  we have to decrypt the password
+
+userSchema.methods.checkpassword = function(password){
+
+ return  bcrypt.compareSync(password, this.password)
+
+
+}
+
+
+
+
 mongoose.exports = mongoose.model("todouser",userSchema)
